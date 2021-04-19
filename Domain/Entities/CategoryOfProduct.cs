@@ -13,5 +13,6 @@ namespace Domain.Entities
         {
             TypeOfProducts = new List<TypeOfProduct>();
         }
+        public string ImagePath { get; set; }
     }
 }

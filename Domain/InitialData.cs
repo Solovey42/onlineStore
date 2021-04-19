@@ -52,52 +52,56 @@ namespace Domain
                    new CategoryOfProduct()
                    {
                        Name = "Плоский прокат",
+                       ImagePath = "/images/1_catalog.png"
                    },
                    new CategoryOfProduct()
                    {
                        Name = "Сортовой прокат",
+                       ImagePath = "/images/2_catalog.png"
                    },
                    new CategoryOfProduct()
                    {
                        Name = "Кровельные и фасадные материалы",
+                       ImagePath = "/images/3_catalog.png"
                    },
                    new CategoryOfProduct()
                    {
                        Name = "Труба",
+                       ImagePath = "/images/4_catalog.png"
                    }
                 );
             }
             if (!context.TypeOfProducts.Any())
             {
                 context.TypeOfProducts.AddRange(
-                    new TypeOfProduct()
-                    {
-                        Name = "Лист горячекатный",
-                        CategoryOfProductId = 1
-                    },
-                    new TypeOfProduct()
-                    {
-                        Name = "Лист холоднокатный",
-                        CategoryOfProductId = 1
-                    },
-                    new TypeOfProduct()
-                    {
-                        Name = "Лист оцинкованный",
-                        CategoryOfProductId = 1
-                    },
-                    new TypeOfProduct()
-                    {
-                        Name = "Арматура",
-                        CategoryOfProductId = 2
-                    },
+                     new TypeOfProduct()
+                     {
+                         Name = "Арматура",
+                         CategoryOfProductId = 1
+                     },
                     new TypeOfProduct()
                     {
                         Name = "Круг",
-                        CategoryOfProductId = 2
+                        CategoryOfProductId = 1
                     },
                     new TypeOfProduct()
                     {
                         Name = "Квадрат",
+                        CategoryOfProductId = 1
+                    },
+                    new TypeOfProduct()
+                    {
+                        Name = "Лист горячекатный",
+                        CategoryOfProductId = 2
+                    },
+                    new TypeOfProduct()
+                    {
+                        Name = "Лист холоднокатный",
+                        CategoryOfProductId = 2
+                    },
+                    new TypeOfProduct()
+                    {
+                        Name = "Лист оцинкованный",
                         CategoryOfProductId = 2
                     },
                     new TypeOfProduct
