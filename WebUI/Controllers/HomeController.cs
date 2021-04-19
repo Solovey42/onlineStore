@@ -35,11 +35,12 @@ namespace WebUI.Controllers
 
         public IActionResult Catalog()
         {
-            var products = _context.Products.Include(p => p.TypeOfProduct).ToList();
+            var categoryOfProduct = _context.CategoryOfProducts.Include(t => t.TypeOfProducts).ToList();
             var typeOfProducts = _context.TypeOfProducts.Include(t => t.Products).ToList();
+            var products = _context.Products.Include(p => p.TypeOfProduct).ToList();
             //string role = User.FindFirst(x => x.Type == ClaimsIdentity.DefaultRoleClaimType).Value; только там где требуется роль админа
             //return Content($"ваша роль: {role}");
-            return View(typeOfProducts);
+            return View(categoryOfProduct);
         }
 
         [Authorize(Roles = "Admin")]

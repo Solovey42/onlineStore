@@ -46,24 +46,79 @@ namespace Domain
                 );
                 context.SaveChanges();
             }
+            if (!context.CategoryOfProducts.Any())
+            {
+                context.CategoryOfProducts.AddRange(
+                   new CategoryOfProduct()
+                   {
+                       Name = "Плоский прокат",
+                   },
+                   new CategoryOfProduct()
+                   {
+                       Name = "Сортовой прокат",
+                   },
+                   new CategoryOfProduct()
+                   {
+                       Name = "Кровельные и фасадные материалы",
+                   },
+                   new CategoryOfProduct()
+                   {
+                       Name = "Труба",
+                   }
+                );
+            }
             if (!context.TypeOfProducts.Any())
             {
                 context.TypeOfProducts.AddRange(
                     new TypeOfProduct()
                     {
                         Name = "Лист горячекатный",
+                        CategoryOfProductId = 1
                     },
                     new TypeOfProduct()
                     {
                         Name = "Лист холоднокатный",
+                        CategoryOfProductId = 1
+                    },
+                    new TypeOfProduct()
+                    {
+                        Name = "Лист оцинкованный",
+                        CategoryOfProductId = 1
                     },
                     new TypeOfProduct()
                     {
                         Name = "Арматура",
+                        CategoryOfProductId = 2
+                    },
+                    new TypeOfProduct()
+                    {
+                        Name = "Круг",
+                        CategoryOfProductId = 2
+                    },
+                    new TypeOfProduct()
+                    {
+                        Name = "Квадрат",
+                        CategoryOfProductId = 2
                     },
                     new TypeOfProduct
                     {
                         Name = "Профнастил",
+                        CategoryOfProductId = 3
+                    },
+                    new TypeOfProduct
+                    {
+                        Name = "Труба электросварная",
+                        CategoryOfProductId = 4
+                    },
+                    new TypeOfProduct
+                    {
+                        Name = "Труба профильная",
+                        CategoryOfProductId = 4
+                    },
+                    new TypeOfProduct
+                    {
+                        Name = "Труба оцинкованная",
+                        CategoryOfProductId = 4
                     }
                 );
                 context.SaveChanges();
@@ -97,14 +152,14 @@ namespace Domain
                         Name = "Арматура А500С 8",
                         Cost = 500,
                         Size = "6 м",
-                        TypeOfProductId = 3
+                        TypeOfProductId = 4
                     },
                     new Product()
                     {
                         Name = "Профнастил С-8 0,4",
                         Cost = 500,
                         Size = "1,2*6 м",
-                        TypeOfProductId = 4
+                        TypeOfProductId = 7
                     }
                 );
                 context.SaveChanges();

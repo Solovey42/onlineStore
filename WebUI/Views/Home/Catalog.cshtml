@@ -1,7 +1,8 @@
-﻿@model IEnumerable<Domain.Entities.TypeOfProduct>
+﻿@model IEnumerable<Domain.Entities.CategoryOfProduct> 
 @{
     ViewData["Title"] = "Список товаров";
 }
+
 @*<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
@@ -26,19 +27,19 @@
 
 <h2>Прайс-лист</h2>
 <div class="row row-cols-1 row-cols-md-3 g-4">
-    @foreach (var typeOfProduct in Model)
+    @foreach (var categoryOfProduct in Model)
     {
         <div class="col">
             <div class="card w-100">
                 <img src="~/images/13dc0491603e10daeea21887d66cb69bbc_1024x600_catalog.png" class="card-img-top" alt=".png">
                 <div class="card-body">
-                    <h5 class="card-title">@typeOfProduct.Name</h5>
+                    <h5 class="card-title">@categoryOfProduct.Name</h5>
                     <p class="card-text">О товаре.</p>
                     <ul class="list-group list-group-flush">
-                        @foreach (var products in typeOfProduct.Products)
+                        @foreach (var typeOfProduct in categoryOfProduct.TypeOfProducts)
                         {
                         <li class="list-group-item">
-                            <a href="#" class="card-link">@products.Name</a>
+                            <a href="#" class="card-link">@typeOfProduct.Name</a>
                         </li>
                         }
                     </ul>
