@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using onlineStore.Models;
 using System;
@@ -15,21 +17,36 @@ namespace WebUI.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        readonly ApplicationContext _context;
+
+        public HomeController(ILogger<HomeController> logger, ApplicationContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
-        [Authorize(Roles = "Admin, User")]
+        //[Authorize(Roles = "Admin, User")]
         public IActionResult Index()
         {
-            string role = User.FindFirst(x => x.Type == ClaimsIdentity.DefaultRoleClaimType).Value;
-            return Content($"ваша роль: {role}");
+            // string role = User.FindFirst(x => x.Type == ClaimsIdentity.DefaultRoleClaimType).Value; только там где требуется роль админа
+            //return Content($"ваша роль: {role}");
+            return RedirectToAction("Catalog");
         }
+
+        public IActionResult Catalog()
+        {
+            var products = _context.Products.Include(p => p.TypeOfProduct).ToList();
+            var typeOfProducts = _context.TypeOfProducts.Include(t => t.Products).ToList();
+            //string role = User.FindFirst(x => x.Type == ClaimsIdentity.DefaultRoleClaimType).Value; только там где требуется роль админа
+            //return Content($"ваша роль: {role}");
+            return View(typeOfProducts);
+        }
+
         [Authorize(Roles = "Admin")]
         public IActionResult About()
         {
-            return Content("Вход только для администратора");
+            var users = _context.Users.ToList();
+            return View(users);
         }
     }
 }
