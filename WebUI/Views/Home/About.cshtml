@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Domain.Entities.User>
+@{
+    ViewData["Title"] = "Список товаров";
+}
+<h2>Вход на сайт выполнен под ролью АДМИНИСТРАТОР</h2>
+    <table class="table">
+      <thead class="thead-dark">
+          <tr>
+              <th scope="col">#</th>
+              <th scope="col">Имя</th>
+              <th scope="col">Фамилия</th>
+              <th scope="col">Телефон</th>
+              <th scope="col">Email</th>
+              <th scope="col">Просмотр заказов </th>
+          </tr>
+      </thead>
+      <tbody>
+          @foreach (var users in Model.Where(user => user.RoleId == 2))
+          {
+          <tr>
+              <th scope="row">@users.Id</th>
+              <td>@users.FirstName</td>
+              <td>@users.LastName</td>
+              <td>@users.ContactPhone</td>
+              <td>@users.Email</td>
+              <td><a href="#" class="breadcrumb-item">Заказы</a></td>
+          </tr>
+          }
+          </tbody>
+    </table>
