@@ -12,24 +12,24 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 </head>
 <body>
-    <main class="form-signin">
-        <form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
-            <h1 class="h3 mb-3 fw-normal">Вход на сайт</h1>
-            <input type="email" asp-for="Email" class="form-control" id="floatingInput" placeholder="name@example.com">
-            <span asp-validation-for="Email"></span>
-            <input asp-for="Password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
-            <span asp-validation-for="Password"></span>
+        <main class="form-signin">
 
-            <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" value="remember-me"> Remember me
-                </label>
-            </div>
-            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-            <a asp-action="Register" asp-controller="Account">Регистрация</a>
-            <p class="mt-5 mb-3 text-muted">&copy; 2021</p>
-        </form>
-
+            <form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
+                <h1 class="h3 mb-3 fw-normal">Вход на сайт</h1>
+                <input type="email" asp-for="Email" class="form-control" placeholder="name@example.com">
+                <span asp-validation-for="Email"></span>
+                <input asp-for="Password" type="password" class="form-control" placeholder="Password">
+                <span asp-validation-for="Password"></span>
+                <div class="field-validation-error" asp-validation-summary="ModelOnly"></div>
+                <div class="form-signin">
+                    <label>
+                        <input type="checkbox" value="remember-me"> Remember me
+                    </label>
+                </div>
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+                <a asp-action="Register" asp-controller="Account">Регистрация</a>
+                <p class="mt-5 mb-3 text-muted">&copy; 2021</p>
+            </form>
     </main>
 </body>
 </html>
