@@ -20,38 +20,33 @@
             <div class="validation" asp-validation-summary="ModelOnly"></div>
             <div>
                 <div>
-                    <input type="text" asp-for="FirstName" class="form-control"  />
                     <span asp-validation-for="FirstName"></span>
+                    <input type="text" asp-for="FirstName" class="form-control" placeholder="asp-validation-for=" FirstName"" />                 
                     <label asp-for="FirstName">Введите имя</label><br />
                 </div>
                 <div>
-
-                    <input type="text" asp-for="LastName" class="form-control"  />
                     <span asp-validation-for="LastName"></span>
+                    <input type="text" asp-for="LastName" class="form-control" />
                     <label asp-for="LastName">Введите фамилию</label><br />
                 </div>
                 <div>
-
-                    <input type="text" asp-for="ContactPhone" class="form-control"  />
                     <span asp-validation-for="ContactPhone"></span>
-                    <label asp-for="ContactPhone" >Введите телефон</label><br />
+                    <input type="text" asp-for="ContactPhone" class="form-control" />
+                    <label asp-for="ContactPhone">Введите телефон</label><br />
                 </div>
                 <div>
-
+                    <span asp-validation-for="Email"></span>
                     <input type="text" asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" ></span>
-                    <label asp-for="Email" >Введите Email</label><br />
+                    <label asp-for="Email">Введите Email</label><br />
                 </div>
                 <div>
-
+                    <span asp-validation-for="Password"></span>
                     <input asp-for="Password" class="form-control" />
-                    <span asp-validation-for="Password" ></span>
                     <label asp-for="Password">Введите пароль</label><br />
                 </div>
                 <div>
-
+                    <span asp-validation-for="ConfirmPassword"></span>
                     <input asp-for="ConfirmPassword" class="form-control" />
-                    <span asp-validation-for="ConfirmPassword" ></span>
                     <label asp-for="ConfirmPassword">Повторите пароль</label><br />
                 </div>
                 <div>
