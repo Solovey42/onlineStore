@@ -11,6 +11,7 @@ namespace Domain.Entities
         public int? TypeOfProductId { get; set; }
         public TypeOfProduct TypeOfProduct { get; set; }
         public List<Cart> Carts { get; set; } = new List<Cart>();
+        public List<Order> Orders { get; set; } = new List<Order>();
 
     }
 }

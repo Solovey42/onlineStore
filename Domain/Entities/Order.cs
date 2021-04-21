@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Domain.Entities
 {
@@ -8,7 +9,6 @@ namespace Domain.Entities
         public DateTime Date { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
-        public int CartId { get; set; }
-        public Cart Cart { get; set; }
+        public List<Product> Products { get; set; } = new List<Product>();
     }
 }

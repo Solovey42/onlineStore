@@ -41,7 +41,7 @@ namespace Domain
                         Email = "admin@gmail.com",
                         Password = "admin",
                         ContactPhone = "+79239999999",
-                        RoleId = 1
+                        RoleId = 1,
                     }
                 );
                 context.SaveChanges();
@@ -184,8 +184,7 @@ namespace Domain
                    new Order()
                    {
                        Date = DateTime.Parse("2021-04-12 12:30:00"),
-                       UserId = 2,
-                       CartId = 1
+                       UserId = 2
                    }
                 );
                 context.SaveChanges();
