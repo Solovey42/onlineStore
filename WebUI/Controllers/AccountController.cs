@@ -48,7 +48,7 @@ namespace WebUI.Controllers
 
                     await Authenticate(user); // аутентификация
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Catalog", "Home");
                 }
                 else
                     ModelState.AddModelError("", "Пользователь с таким Email уже существует");
@@ -73,7 +73,7 @@ namespace WebUI.Controllers
                 {
                     await Authenticate(user); // аутентификация
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Catalog", "Home");
                 }
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
@@ -100,7 +100,7 @@ namespace WebUI.Controllers
         {
             // удаляем аутентификационные куки
             await HttpContext.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Catalog", "Home");
         }
     }
 }

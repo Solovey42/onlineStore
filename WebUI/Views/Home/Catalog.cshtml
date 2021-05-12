@@ -39,7 +39,7 @@
                         @foreach (var typeOfProduct in categoryOfProduct.TypeOfProducts)
                         {
                         <li class="list-group-item">
-                            <a href="#" class="card-link">@typeOfProduct.Name</a>
+                            <a asp-controller="Home" asp-action="ProductList" asp-route-id="@typeOfProduct.Id" class="card-link">@typeOfProduct.Name</a>
                         </li>
                         }
                     </ul>

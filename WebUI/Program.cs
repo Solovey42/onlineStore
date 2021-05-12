@@ -1,5 +1,6 @@
 using Domain;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +25,7 @@ namespace WebUI
                 var context = services.GetRequiredService<ApplicationContext>();
                 InitialData.Initialize(context);
             }
+            Console.WriteLine(typeof(Controller).Assembly.GetName().Version.ToString());
             host.Run();
         }
 

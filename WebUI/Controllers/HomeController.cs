@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using WebUI.Models;
 
 namespace WebUI.Controllers
 {
@@ -26,21 +27,27 @@ namespace WebUI.Controllers
         }
 
         //[Authorize(Roles = "Admin, User")]
-        public IActionResult Index()
+/*        public IActionResult Index()
         {
             // string role = User.FindFirst(x => x.Type == ClaimsIdentity.DefaultRoleClaimType).Value; только там где требуется роль админа
             //return Content($"ваша роль: {role}");
             return RedirectToAction("Catalog");
-        }
+        }*/
 
         public IActionResult Catalog()
         {
             var categoryOfProduct = _context.CategoryOfProducts.Include(t => t.TypeOfProducts).ToList();
-            var typeOfProducts = _context.TypeOfProducts.Include(t => t.Products).ToList();
-            var products = _context.Products.Include(p => p.TypeOfProduct).ToList();
+            //var typeOfProducts = _context.TypeOfProducts.Include(t => t.Products).ToList();
+            //var products = _context.Products.Include(p => p.TypeOfProduct).ToList();
             //string role = User.FindFirst(x => x.Type == ClaimsIdentity.DefaultRoleClaimType).Value; только там где требуется роль админа
             //return Content($"ваша роль: {role}");
             return View(categoryOfProduct);
+        }
+        
+        public IActionResult ProductList(int id)
+        {
+            var products = _context.Products.Include(p => p.TypeOfProduct).ToList().Where(a => a.TypeOfProductId == id);
+            return View(products);
         }
 
         [Authorize(Roles = "Admin")]

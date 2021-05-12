@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Domain.Entities.Product>
+@{
+    ViewData["Title"] = "Список товаров";
+}
+<h2>Список товаров @Model.First().TypeOfProduct.Name</h2>
+<table class="table">
+    <tr>
+        <th>Название</th>
+        <th>Размер</th>
+        <th>Стоимость</th>
+        <th>Количество</th>
+        <th>Ед.изм</th>
+        <th class="text-right">Добавить товар в корзину</th>
+    </tr>
+    @foreach (var product in Model)
+    {
+        <form method="post">
+            <tr>
+                <td>@product.Name</td>
+                <td>@product.Size</td>
+                <td>@product.Cost</td>
+                <td><input name="quantity" type="text" class="form-control" placeholder="Введите количество" /></td>
+                <td>@product.Unit</td>
+                <td class="text-right"><input asp-controller="Cart" asp-action="AddToCart" asp-route-productId=@product.Id asp-route-returnUrl=@Context.Request.Path class="btn btn-outline-primary" type="submit" value="Добавить в корзину"></td>
+            </tr>
+        </form>
+    }
+</table>
