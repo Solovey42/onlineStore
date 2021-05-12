@@ -9,6 +9,6 @@ namespace Domain.Entities
         public DateTime Date { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
-        public List<Product> Products { get; set; } = new List<Product>();
+        public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
     }
 }

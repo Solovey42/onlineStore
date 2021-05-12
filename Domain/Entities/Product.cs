@@ -8,10 +8,10 @@ namespace Domain.Entities
         public string Name { get; set; }
         public double Cost { get; set; }
         public string Size { get; set; }
+        public string Unit { get; set; }
         public int? TypeOfProductId { get; set; }
         public TypeOfProduct TypeOfProduct { get; set; }
-        public List<Cart> Carts { get; set; } = new List<Cart>();
-        public List<Order> Orders { get; set; } = new List<Order>();
-
+        public List<CartDetail> CartDetails { get; set; } = new List<CartDetail>();
+        public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
     }
 }
