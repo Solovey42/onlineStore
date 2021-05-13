@@ -10,5 +10,6 @@ namespace WebUI.Models
     {
         public Cart Cart { get; set; }
         public string ReturnUrl { get; set; }
+        public int? Code { get; set; }
     }
 }

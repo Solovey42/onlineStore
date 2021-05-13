@@ -24,7 +24,6 @@
                 @if (Model.SelectedProductId == product.Id)
                 {
                     <input asp-for="Quantity" type="text" class="form-control inputError" placeholder="Введите количество" /><span asp-validation-for="Quantity"></span>
-                    <div class="field-validation-error" asp-validation-summary="ModelOnly"></div>
                 }
                 else
                 {
