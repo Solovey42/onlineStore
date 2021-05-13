@@ -34,18 +34,17 @@ namespace WebUI.Controllers
             cart = GetCart();
             Product product = _context.Products
                 .FirstOrDefault(p => p.Id == productId);
-
             if (product != null)
             {
                 _context.CartDetails.Add(
-               new CartDetail
-               {
-                   CartId = cart.Id,
-                   Cart = cart,
-                   ProductId = product.Id,
-                   Product = product,
-                   Quantity = quantity
-               });
+                   new CartDetail
+                   {
+                       CartId = cart.Id,
+                       Cart = cart,
+                       ProductId = product.Id,
+                       Product = product,
+                       Quantity = quantity
+                   });
                 _context.SaveChanges();
                 cart = GetCart();
             }

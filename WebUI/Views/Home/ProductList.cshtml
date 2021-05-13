@@ -1,8 +1,9 @@
-﻿@model IEnumerable<Domain.Entities.Product>
+﻿@model WebUI.Models.ProductListViewModel
 @{
     ViewData["Title"] = "Список товаров";
+    <link href="~/css/productList.css" rel="stylesheet" />
 }
-<h2>Список товаров @Model.First().TypeOfProduct.Name</h2>
+<h2>Список товаров @Model.Products.First().TypeOfProduct.Name</h2>
 <table class="table">
     <tr>
         <th>Название</th>
@@ -12,17 +13,29 @@
         <th>Ед.изм</th>
         <th class="text-right">Добавить товар в корзину</th>
     </tr>
-    @foreach (var product in Model)
+    @foreach (var product in Model.Products)
     {
-        <form method="post">
-            <tr>
+        <tr>
+            <form method="post" asp-controller="Home" asp-action="ProductList">
                 <td>@product.Name</td>
                 <td>@product.Size</td>
                 <td>@product.Cost</td>
-                <td><input name="quantity" type="text" class="form-control" placeholder="Введите количество" /></td>
+                <td>
+                @if (Model.SelectedProductId == product.Id)
+                {
+                    <input asp-for="Quantity" type="text" class="form-control inputError" placeholder="Введите количество" /><span asp-validation-for="Quantity"></span>
+                    <div class="field-validation-error" asp-validation-summary="ModelOnly"></div>
+                }
+                else
+                {
+                    <input asp-for="Quantity" type="text" class="form-control" placeholder="Введите количество" value="" />
+                }
+                </td>
                 <td>@product.Unit</td>
-                <td class="text-right"><input asp-controller="Cart" asp-action="AddToCart" asp-route-productId=@product.Id asp-route-returnUrl=@Context.Request.Path class="btn btn-outline-primary" type="submit" value="Добавить в корзину"></td>
-            </tr>
-        </form>
+                <td class="text-right">
+                    <input asp-route-selectedProductId=@product.Id asp-route-returnUrl=@Context.Request.Path class="btn btn-outline-primary" type="submit" value="Добавить в корзину">
+                </td>
+            </form>
+        </tr>
     }
 </table>
