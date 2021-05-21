@@ -68,7 +68,7 @@ namespace WebUI.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult About()
         {
-            var users = _context.Users.ToList();
+            var users = _context.Users.Include(u => u.Orders).ToList();
             return View(users);
         }
     }
