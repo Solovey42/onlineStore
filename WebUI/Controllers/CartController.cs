@@ -22,6 +22,46 @@ namespace WebUI.Controllers
         {
             _context = context;
         }
+        public ActionResult OrderView(int price, string returnUrl)
+        {
+            cart = GetCart();
+            if (cart.CartDetail.Count == 0)
+            {
+                return RedirectToAction("CartView", "Cart", new { returnUrl = returnUrl, code = 3 });
+            }
+            return View(new OrderViewModel { Cart = cart, Price = price});
+        }
+
+        public ActionResult CreateOrder(string address)
+        {
+            cart = GetCart();
+            Order order = new Order
+            {
+                UserId = cart.User.Id,
+                User = cart.User,
+                Date = DateTime.Now,
+                Address = address
+            };
+            _context.Orders.Add(order);
+            _context.SaveChanges();
+            for(int i=cart.CartDetail.Count-1; i >= 0;i--)
+            {
+                _context.OrderDetails.Add(
+                      new OrderDetail
+                      {
+                          OrderId = order.Id,
+                          Order = order,
+                          ProductId = cart.CartDetail[i].Product.Id,
+                          Product = cart.CartDetail[i].Product,
+                          Quantity = cart.CartDetail[i].Quantity,
+                          UnitPrice = cart.CartDetail[i].Product.Cost
+                      });
+                _context.CartDetails.Remove(cart.CartDetail[i]);
+                _context.SaveChanges();
+            }
+            cart.CartDetail.Clear();
+            return View();
+        }
 
         public ViewResult CartView(string returnUrl, int? code)
         {
@@ -96,6 +136,26 @@ namespace WebUI.Controllers
         }
 
         public Cart GetCart()
+        {
+            User user = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name);
+            var cart = _context.Carts.Include(t => t.CartDetail).FirstOrDefault(c => c.User == user);
+            var cartDetail = _context.CartDetails.Include(t => t.Product).ToList();
+
+            if (cart == null)
+            {
+                cart = new Cart
+                {
+                    UserId = user.Id,
+                    User = user
+                };
+                _context.Carts.Add(cart);
+                _context.SaveChanges();
+                return cart;
+            }
+            return cart;
+        }
+
+        public Cart GetOrder()
         {
             User user = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name);
             var cart = _context.Carts.Include(t => t.CartDetail).FirstOrDefault(c => c.User == user);

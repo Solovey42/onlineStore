@@ -17,6 +17,12 @@
         Количество введено неверно.
     </div>
 }
+@if (Model.Code == 3)
+{
+    <div class="alert alert-danger" role="alert">
+        Заполните корзину чтобы оформить заказ
+    </div>
+}
 <table class="table">
     <thead>
         <tr>
@@ -81,5 +87,6 @@
 </table>
 
 <div class="text-center">
-    <a class="btn btn-outline-primary" href="@Model.ReturnUrl">Продолжить покупки</a>
+    <a class="btn btn-outline-primary col-lg-2" href="@Model.ReturnUrl">Продолжить покупки</a>
+    <a class="btn btn-outline-warning col-lg-2" asp-controller="Cart" asp-action="OrderView" asp-route-returnUrl=@Model.ReturnUrl asp-route-price=@Model.Cart.ComputeTotalValue()>Оформить заказ</a>
 </div>
