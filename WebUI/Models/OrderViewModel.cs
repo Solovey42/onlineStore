@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace WebUI.Models
 {
-    public class CartViewModel
+    public class OrderViewModel
     {
         public Cart Cart { get; set; }
-        public string ReturnUrl { get; set; }
-        public int? Code { get; set; }
+        public int Price { get; set; }
     }
 }

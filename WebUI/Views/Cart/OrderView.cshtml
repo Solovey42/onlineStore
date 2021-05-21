@@ -1,0 +1,47 @@
+﻿@model WebUI.Models.OrderViewModel
+
+@{
+    ViewBag.Title = "OnlineStore: ваш заказ";
+}
+<form>
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">Оформление закза</h1>
+        <p class="lead">Ваши данные:</p>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><p class="lead">@Model.Cart.User.FirstName</p></li>
+            <li class="list-group-item"><p class="lead">@Model.Cart.User.LastName</p></li>
+            <li class="list-group-item"><p class="lead">@Model.Cart.User.ContactPhone</p></li>
+        </ul>
+    </div>
+    @foreach (var cartDetail in Model.Cart.CartDetail)
+    {
+        <div class="card mb-4 box-shadow">
+            <div class="card-body">
+                <h1 class="card-title pricing-card-title lead">@cartDetail.Product.Name</h1>
+                <ul class="list-unstyled mt-3 mb-4">
+                    <li>Количество: @cartDetail.Quantity</li>
+                    <li>Сумма: @((cartDetail.Quantity * cartDetail.Product.Cost).ToString("# руб"))</li>
+                </ul>
+            </div>
+        </div>
+    }
+    <h4 class="mb-3 lead">Сумма заказа:<span class="badge badge-light">@Model.Price руб.</span></h4>
+    <hr class="mb-4">
+    <div class="mb-3">
+        <h4 class="mb-3 lead">Адресс</h4>
+        <input name="address" type="text" class="form-control" placeholder="Введите адрес доставки" />
+    </div>
+    <h4 class="mb-3 lead">Оплата</h4>
+    <div class="my-3">
+        <div class="form-check">
+            <input id="card" name="paymentMethod" type="radio" class="form-check-input" required>
+            <label class="form-check-label" for="credit">Банковской картой онлайн</label>
+        </div>
+        <div class="form-check">
+            <input id="cash" name="paymentMethod" type="radio" class="form-check-input" required>
+            <label class="form-check-label" for="debit">Наличными при получении</label>
+        </div>
+    </div>
+    <hr class="mb-4">
+    <input asp-controller="Cart" asp-action="CreateOrder" class="btn btn-outline-primary btn-lg btn-block" type="submit" value="Оформить заказ">
+</form>

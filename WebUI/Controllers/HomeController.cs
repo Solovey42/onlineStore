@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -43,11 +44,25 @@ namespace WebUI.Controllers
             //return Content($"ваша роль: {role}");
             return View(categoryOfProduct);
         }
-        
+
+        [HttpGet]
         public IActionResult ProductList(int id)
         {
             var products = _context.Products.Include(p => p.TypeOfProduct).ToList().Where(a => a.TypeOfProductId == id);
-            return View(products);
+            List<Product> list = products.ToList();
+            return View(new ProductListViewModel(list, null, null));
+        }
+
+        [HttpPost]
+        public IActionResult ProductList(int id, int selectedProductId, string returnUrl, [FromForm] ProductListViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("AddToCart", "Cart", new { productId = selectedProductId, returnUrl = returnUrl, quantity = model.Quantity });
+            }
+            var products = _context.Products.Include(p => p.TypeOfProduct).ToList().Where(a => a.TypeOfProductId == id);
+            List<Product> list = products.ToList();
+            return View(new ProductListViewModel(list, null, selectedProductId));
         }
 
         [Authorize(Roles = "Admin")]

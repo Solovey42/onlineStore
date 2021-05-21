@@ -22,11 +22,51 @@ namespace WebUI.Controllers
         {
             _context = context;
         }
-
-        public ViewResult CartView(string returnUrl)
+        public ActionResult OrderView(int price, string returnUrl)
         {
             cart = GetCart();
-            return View(new CartViewModel { Cart = cart, ReturnUrl = returnUrl });
+            if (cart.CartDetail.Count == 0)
+            {
+                return RedirectToAction("CartView", "Cart", new { returnUrl = returnUrl, code = 3 });
+            }
+            return View(new OrderViewModel { Cart = cart, Price = price});
+        }
+
+        public ActionResult CreateOrder(string address)
+        {
+            cart = GetCart();
+            Order order = new Order
+            {
+                UserId = cart.User.Id,
+                User = cart.User,
+                Date = DateTime.Now,
+                Address = address
+            };
+            _context.Orders.Add(order);
+            _context.SaveChanges();
+            for(int i=cart.CartDetail.Count-1; i >= 0;i--)
+            {
+                _context.OrderDetails.Add(
+                      new OrderDetail
+                      {
+                          OrderId = order.Id,
+                          Order = order,
+                          ProductId = cart.CartDetail[i].Product.Id,
+                          Product = cart.CartDetail[i].Product,
+                          Quantity = cart.CartDetail[i].Quantity,
+                          UnitPrice = cart.CartDetail[i].Product.Cost
+                      });
+                _context.CartDetails.Remove(cart.CartDetail[i]);
+                _context.SaveChanges();
+            }
+            cart.CartDetail.Clear();
+            return View();
+        }
+
+        public ViewResult CartView(string returnUrl, int? code)
+        {
+            cart = GetCart();
+            return View(new CartViewModel { Cart = cart, ReturnUrl = returnUrl, Code = code });
         }
 
         public RedirectToActionResult AddToCart(int productId, string returnUrl, int quantity)
@@ -34,37 +74,50 @@ namespace WebUI.Controllers
             cart = GetCart();
             Product product = _context.Products
                 .FirstOrDefault(p => p.Id == productId);
-
             if (product != null)
             {
-                _context.CartDetails.Add(
-               new CartDetail
-               {
-                   CartId = cart.Id,
-                   Cart = cart,
-                   ProductId = product.Id,
-                   Product = product,
-                   Quantity = quantity
-               });
-                _context.SaveChanges();
-                cart = GetCart();
+                if(cart.CartDetail.Contains(cart.CartDetail.Where(cartDetail => cartDetail.ProductId == productId).FirstOrDefault()))
+                {
+                    CartDetail cartDetail = _context.CartDetails.FirstOrDefault(cartDetail => cartDetail.Cart == cart && cartDetail.Product == product);
+                    cartDetail.Quantity += quantity;
+                    _context.SaveChanges();
+                    return RedirectToAction("CartView", "Cart", new { returnUrl = returnUrl, code = 1 });
+                }
+                else
+                {
+                    _context.CartDetails.Add(
+                       new CartDetail
+                       {
+                           CartId = cart.Id,
+                           Cart = cart,
+                           ProductId = product.Id,
+                           Product = product,
+                           Quantity = quantity
+                       });
+                    _context.SaveChanges();
+                    cart = GetCart();
+                }
             }
             return RedirectToAction("CartView", "Cart", new { returnUrl = returnUrl });
         }
 
         public ActionResult EditProduct(int productId, int newQuantity, string returnUrl)
         {
-            Product product = _context.Products
-                .FirstOrDefault(p => p.Id == productId);
-            
-            if (product != null)
+            if (newQuantity > 0 && newQuantity < 10001 && newQuantity !=0)
             {
-                cart = GetCart();
-                CartDetail cartDetail = _context.CartDetails.FirstOrDefault(p => p.Cart == cart && p.Product == product);
-                cartDetail.Quantity = newQuantity;
-                _context.SaveChanges();
+                Product product = _context.Products
+               .FirstOrDefault(p => p.Id == productId);
+
+                if (product != null)
+                {
+                    cart = GetCart();
+                    CartDetail cartDetail = _context.CartDetails.FirstOrDefault(p => p.Cart == cart && p.Product == product);
+                    cartDetail.Quantity = newQuantity;
+                    _context.SaveChanges();
+                }
+                return RedirectToAction("CartView", "Cart", new { returnUrl = returnUrl });
             }
-            return RedirectToAction("CartView", "Cart", new { returnUrl = returnUrl });
+            return RedirectToAction("CartView", "Cart", new { returnUrl = returnUrl, code = 2 });
         }
 
         public RedirectToActionResult RemoveProduct(int productId, string returnUrl)
@@ -85,7 +138,26 @@ namespace WebUI.Controllers
         public Cart GetCart()
         {
             User user = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name);
+            var cart = _context.Carts.Include(t => t.CartDetail).FirstOrDefault(c => c.User == user);
+            var cartDetail = _context.CartDetails.Include(t => t.Product).ToList();
 
+            if (cart == null)
+            {
+                cart = new Cart
+                {
+                    UserId = user.Id,
+                    User = user
+                };
+                _context.Carts.Add(cart);
+                _context.SaveChanges();
+                return cart;
+            }
+            return cart;
+        }
+
+        public Cart GetOrder()
+        {
+            User user = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name);
             var cart = _context.Carts.Include(t => t.CartDetail).FirstOrDefault(c => c.User == user);
             var cartDetail = _context.CartDetails.Include(t => t.Product).ToList();
 

@@ -5,6 +5,24 @@
 }
 
 <h2>Ваша корзина</h2>
+@if (Model.Code == 1)
+{
+    <div class="alert alert-primary" role="alert">
+        Добавляемый товар уже присутствовал в корзине. Было обновлено количество с учетом введеного.
+    </div>
+}
+@if (Model.Code == 2)
+{
+    <div class="alert alert-danger" role="alert">
+        Количество введено неверно.
+    </div>
+}
+@if (Model.Code == 3)
+{
+    <div class="alert alert-danger" role="alert">
+        Заполните корзину чтобы оформить заказ
+    </div>
+}
 <table class="table">
     <thead>
         <tr>
@@ -28,28 +46,28 @@
                 <td class="text-right">
                     <input data-toggle="modal" data-target="#tips-@cartDetail.CartDetailId" class="btn btn-outline-primary" type="submit" value="Изменить кол-во">
                     <div class="modal fade" id="tips-@cartDetail.CartDetailId" tabindex="-1" role="dialog" aria-labelledby="tipsLabel">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLongTitle">Изменение кол-ва продукции</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Изменение кол-ва продукции</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form method="post">
+                                    <div class="modal-body">
+                                        <label>@cartDetail.Product.Name</label>
+                                        <input name="newQuantity" type="text" class="form-control" placeholder="Введите количество" />
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                                        <input asp-controller="Cart" asp-action="EditProduct" asp-route-productId=@cartDetail.ProductId asp-route-returnUrl=@Model.ReturnUrl class="btn btn-outline-primary" type="submit" value="Сохранить изменения">
+                                    </div>
+                                </form>
                             </div>
-                            <form method="post">
-                                <div class="modal-body">
-                                    <label>@cartDetail.Product.Name</label>
-                                    <input name="newQuantity" type="text" class="form-control" placeholder="Введите количество" />
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-                                    <input asp-controller="Cart" asp-action="EditProduct" asp-route-productId=@cartDetail.ProductId asp-route-returnUrl=@Model.ReturnUrl class="btn btn-outline-primary" type="submit" value="Сохранить изменения">
-                                </div>
-                            </form>
                         </div>
                     </div>
-                    </div>
-                </td> 
+                </td>
                 <td class="text-right">
                     <form asp-action="RemoveProduct" asp-controller="Cart">
                         <input asp-controller="Cart" asp-action="RemoveProduct" asp-route-productId=@cartDetail.ProductId asp-route-returnUrl=@Model.ReturnUrl class="btn btn-outline-primary" type="submit" value="Удалить товар">
@@ -69,5 +87,6 @@
 </table>
 
 <div class="text-center">
-    <a class="btn btn-outline-primary" href="@Model.ReturnUrl">Продолжить покупки</a>
+    <a class="btn btn-outline-primary col-lg-2" href="@Model.ReturnUrl">Продолжить покупки</a>
+    <a class="btn btn-outline-warning col-lg-2" asp-controller="Cart" asp-action="OrderView" asp-route-returnUrl=@Model.ReturnUrl asp-route-price=@Model.Cart.ComputeTotalValue()>Оформить заказ</a>
 </div>
