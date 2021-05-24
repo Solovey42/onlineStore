@@ -1,5 +1,6 @@
 ﻿using Domain;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,8 @@ namespace WebUI.Controllers
         {
             _context = context;
         }
+
+        [Authorize(Roles = "User")]
         public ActionResult OrderView(int price, string returnUrl)
         {
             cart = GetCart();
@@ -32,6 +35,7 @@ namespace WebUI.Controllers
             return View(new OrderViewModel { Cart = cart, Price = price});
         }
 
+        [Authorize(Roles = "User")]
         public ActionResult CreateOrder(string address)
         {
             cart = GetCart();
@@ -63,12 +67,14 @@ namespace WebUI.Controllers
             return View();
         }
 
+        [Authorize(Roles = "User")]
         public ViewResult CartView(string returnUrl, int? code)
         {
             cart = GetCart();
             return View(new CartViewModel { Cart = cart, ReturnUrl = returnUrl, Code = code });
         }
 
+        [Authorize(Roles = "User")]
         public RedirectToActionResult AddToCart(int productId, string returnUrl, int quantity)
         {
             cart = GetCart();
@@ -101,6 +107,7 @@ namespace WebUI.Controllers
             return RedirectToAction("CartView", "Cart", new { returnUrl = returnUrl });
         }
 
+        [Authorize(Roles = "User")]
         public ActionResult EditProduct(int productId, int newQuantity, string returnUrl)
         {
             if (newQuantity > 0 && newQuantity < 10001 && newQuantity !=0)
@@ -120,6 +127,7 @@ namespace WebUI.Controllers
             return RedirectToAction("CartView", "Cart", new { returnUrl = returnUrl, code = 2 });
         }
 
+        [Authorize(Roles = "User")]
         public RedirectToActionResult RemoveProduct(int productId, string returnUrl)
         {
             Product product = _context.Products
@@ -135,6 +143,7 @@ namespace WebUI.Controllers
             return RedirectToAction("CartView", "Cart", new { returnUrl = returnUrl });
         }
 
+        [Authorize(Roles = "User")]
         public Cart GetCart()
         {
             User user = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name);
@@ -155,6 +164,7 @@ namespace WebUI.Controllers
             return cart;
         }
 
+        [Authorize(Roles = "User")]
         public Cart GetOrder()
         {
             User user = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name);

@@ -27,13 +27,6 @@ namespace WebUI.Controllers
             _context = context;
         }
 
-        //[Authorize(Roles = "Admin, User")]
-/*        public IActionResult Index()
-        {
-            // string role = User.FindFirst(x => x.Type == ClaimsIdentity.DefaultRoleClaimType).Value; только там где требуется роль админа
-            //return Content($"ваша роль: {role}");
-            return RedirectToAction("Catalog");
-        }*/
 
         public IActionResult Catalog()
         {
@@ -65,11 +58,54 @@ namespace WebUI.Controllers
             return View(new ProductListViewModel(list, null, selectedProductId));
         }
 
+        [HttpGet]
         [Authorize(Roles = "Admin")]
-        public IActionResult About()
+        public IActionResult AdminView()
         {
-            var users = _context.Users.Include(u => u.Orders).ToList();
-            return View(users);
+            List<User> users = _context.Users.Include(user => user.Orders).OrderBy(user => user.Id).ToList();
+            List<Product> products = _context.Products.Include(product => product.TypeOfProduct).OrderBy(product => product.Id).ToList();
+            List<Order> orders = _context.Orders.Include(order => order.OrderDetails).OrderBy(order => order.Id).ToList();
+            return View(new AdminPageModel(users, products, orders));
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult AdminView([FromForm] AdminPageModel model, int productId)
+        {
+            if (ModelState.IsValid)
+            {
+                Product product = _context.Products.FirstOrDefault(p => p.Id == productId);
+                if (product != null)
+                {
+                    if (model.Name != null)
+                        product.Name = model.Name;
+                    if (model.Size != null)
+                        product.Size = model.Size;
+                    if (model.Cost > 0 && model.Cost < 10001 && model.Cost != 0)
+                        product.Cost = model.Cost;
+                    else
+                        return RedirectToAction("AdminView", "Home");
+                    _context.SaveChanges();
+                }
+                return RedirectToAction("AdminView", "Home");
+            }
+            List<User> users = _context.Users.Include(user => user.Orders).OrderBy(user => user.Id).ToList();
+            List<Product> products = _context.Products.Include(product => product.TypeOfProduct).OrderBy(product => product.Id).ToList();
+            List<Order> orders = _context.Orders.Include(order => order.OrderDetails).OrderBy(order => order.Id).ToList();
+            return View(new AdminPageModel(users, products, orders));
+            
+        }
+        public RedirectToActionResult RemoveProduct(int productId)
+        {
+            Product product = _context.Products
+                .FirstOrDefault(p => p.Id == productId);
+
+            if (product != null)
+            {
+                _context.Products.Remove(product);
+                _context.SaveChanges();
+            }
+            return RedirectToAction("AdminView", "Home");
         }
     }
 }

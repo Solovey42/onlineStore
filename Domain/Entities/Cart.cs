@@ -12,7 +12,6 @@ namespace Domain.Entities
         public decimal ComputeTotalValue()
         {
             return (decimal)CartDetail.Sum(e => e.Product.Cost * e.Quantity);
-
         }
     }
 }
