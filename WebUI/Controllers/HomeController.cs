@@ -1,13 +1,17 @@
-﻿using Domain;
+﻿using ClosedXML.Excel;
+using Domain;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using onlineStore.Models;
+using BusinessLogic;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -106,6 +110,78 @@ namespace WebUI.Controllers
                 _context.SaveChanges();
             }
             return RedirectToAction("AdminView", "Home");
+        }
+
+        [HttpPost]
+        public string Import(IFormFile fileExcel)
+        {
+            string s1 = "", s2 = "", s3 = "", s4 = "";
+            //PriceViewModel viewModel = new PriceViewModel();
+            using (XLWorkbook workBook = new XLWorkbook(fileExcel.OpenReadStream(), XLEventTracking.Disabled))
+            {
+                foreach (IXLWorksheet worksheet in workBook.Worksheets)
+                {
+                    Product product = new Product();
+                    s1 = worksheet.Name;
+
+                    foreach (IXLColumn column in worksheet.ColumnsUsed().Skip(1))
+                    {
+                        Product product2 = new Product();
+                        s2 = column.Cell(1).Value.ToString();
+
+                        foreach (IXLRow row in worksheet.RowsUsed().Skip(1))
+                        {
+                            try
+                            {
+                                Product product3 = new Product();
+                                s3 = row.Cell(1).Value.ToString();
+                                s4 = row.Cell(column.ColumnNumber()).Value.ToString();
+
+                            }
+                            catch (Exception e)
+                            {
+                                //logging
+                            }
+                        }
+
+                        //phoneBrand.PhoneModels.Add(phoneModel);
+                    }
+                   /// viewModel.PhoneBrands.Add(phoneBrand);
+                }
+            }
+            return $"строки: {s1} {s2} {s3} {s4}";
+/*            return RedirectToAction("AdminView", "Home");*/
+        }
+
+        public ActionResult Export()
+        {
+            using (XLWorkbook workbook = new XLWorkbook(XLEventTracking.Disabled))
+            {
+                var worksheet = workbook.Worksheets.Add("Brands");
+
+                worksheet.Cell("A1").Value = "Бренд";
+                worksheet.Cell("B1").Value = "Модели";
+                worksheet.Row(1).Style.Font.Bold = true;
+
+                //нумерация строк/столбцов начинается с индекса 1 (не 0)
+                for (int i = 0; i < 5; i++)
+                {
+                    worksheet.Cell(i + 2, 1).Value = 1;
+                    /*worksheet.Cell(i + 2, 2).Value = string.Join(", ", phoneBrands[i].PhoneModels.Select(x => x.Title));*/
+                }
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    stream.Flush();
+
+                    return new FileContentResult(stream.ToArray(),
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    {
+                        FileDownloadName = $"brands_{DateTime.UtcNow.ToShortDateString()}.xlsx"
+                    };
+                }
+            }
         }
     }
 }
