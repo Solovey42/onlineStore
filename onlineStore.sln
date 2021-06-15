@@ -8,6 +8,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{B5CA8053-8A68-4E4F-B9E3-CF02CF199CBD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebUI", "WebUI\WebUI.csproj", "{8E3A5FA7-D1BE-484D-8401-D0C8EFB329E4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B5CA8053-8A68-4E4F-B9E3-CF02CF199CBD} = {B5CA8053-8A68-4E4F-B9E3-CF02CF199CBD}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
