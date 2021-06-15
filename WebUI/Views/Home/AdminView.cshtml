@@ -148,7 +148,18 @@
         </table>
     </div>
 </div>
-<div class="btn-group-vertical btn-block" role="group" aria-label="Basic outlined example">
-    <button type="button" class="btn btn-outline-primary btn-lg btn-block">Экспорт заказов</button>
-    <button type="button" class="btn btn-outline-primary btn-lg btn-block">Импорт продукции</button>
-</div>
+
+<form  asp-action="Import" asp-controller="Home" enctype="multipart/form-data" method="post">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <button asp-action="Import" asp-controller="Home" class="btn btn-outline-primary" type="submit" value="Upload">Импорт продукции</button>
+        </div>
+        <div class="custom-file">
+            <input type="file" class="custom-file-input" name="fileExcel" id="fileExcel">
+            <lable class="custom-file-label" for="fileExcel">Выберите файл</lable>
+        </div>
+    </div>
+</form>
+<form asp-action="Export" asp-controller="Home">
+    <button asp-action="Export" asp-controller="Home" type="submit" class="btn btn-outline-primary btn-lg btn-block">Экспорт заказов</button>
+</form>
