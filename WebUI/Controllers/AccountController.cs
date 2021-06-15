@@ -39,7 +39,15 @@ namespace WebUI.Controllers
                 if (user == null)
                 {
                     // добавляем пользователя в бд
-                    user = new User { FirstName = model.FirstName, LastName = model.LastName, Email = model.Email, Password = model.Password, ContactPhone = model.ContactPhone, RoleId = 2 };
+                    user = new User { 
+                                        FirstName = model.FirstName, 
+                                        LastName = model.LastName, 
+                                        Email = model.Email, 
+                                        Password = model.Password, 
+                                        ContactPhone = model.ContactPhone, 
+                                        RoleId = 2 
+                    };
+
                     Role userRole = await db.Roles.FirstOrDefaultAsync(r => r.Name == "User");
                     if (userRole != null)
                         user.Role = userRole;
