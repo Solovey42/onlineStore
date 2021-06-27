@@ -1,0 +1,165 @@
+﻿@model WebUI.Models.AdminPageModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Страница администратора";
+}
+@if (ViewData.ModelState.IsValid == false)
+{
+    <div class="alert alert-danger">
+        Данные введены неверно
+    </div>
+}
+<h1 class="display-3 text-center">Данные системы учета</h1>
+<ul class="nav nav-tabs nav-fill justify-content-center" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Клиенты</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Заказы</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Продукция</a>
+    </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Фамилия</th>
+                    <th scope="col">Телефон</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Количество заказов</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Users.Where(user => user.RoleId == 2))
+                {
+                    <tr>
+                        <th scope="row">@user.Id</th>
+                        <td>@user.FirstName</td>
+                        <td>@user.LastName</td>
+                        <td>@user.ContactPhone</td>
+                        <td>@user.Email</td>
+                        <td>@user.Orders.Count</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Имя заказчика</th>
+                    <th scope="col">Дата заказа</th>
+                    <th scope="col">Адресс</th>
+                    <th scope="col">Сумма</th>
+                    <th scope="col">Позиции товаров</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model.Orders)
+                {
+                    <tr>
+                        <th scope="row">@order.Id</th>
+                        <td>@order.User.LastName @order.User.FirstName</td>
+                        <td>@order.Date</td>
+                        <td>@order.Address</td>
+                        <td>@order.ComputeTotalValue() руб.</td>
+                        <td><a href="#">Позиции</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Тип товара</th>
+                    <th scope="col">Наименование</th>
+                    <th scope="col">Размер</th>
+                    <th scope="col">Ед.изм.</th>
+                    <th scope="col">Стоимость</th>
+                    <th scope="col">Изменить</th>
+                    <th scope="col">Удалить</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model.Products)
+                {
+                    <tr>
+                        <th scope="row">@product.Id</th>
+                        <td>@product.TypeOfProduct.Name</td>
+                        <td>@product.Name</td>
+                        <td>@product.Size</td>
+                        <td>@product.Unit</td>
+                        <td>@product.Cost руб.</td>
+                        <td class="text-right">
+                            <input data-toggle="modal" data-target="#tips-@product.Id" class="btn btn-outline-primary" type="submit" value="Изменить товар">
+                            <div class="modal fade" id="tips-@product.Id" tabindex="-1" role="dialog" aria-labelledby="tipsLabel">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Изменение данных о товаре</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form method="post" asp-action="AdminView" asp-controller="Home">
+                                            <div class="modal-body">
+                                                <p class="lead text-center">@product.Name</p>
+                                                <div class="input-group mb-3">
+                                                    <input asp-for="Name" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                                                    <span class="input-group-text" id="basic-addon1">Наименование</span>
+                                                </div>
+                                                <div class="input-group mb-3">
+                                                    <input asp-for="Size" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                                                    <span class="input-group-text" id="basic-addon1">Размер</span>
+                                                </div>
+                                                <div class="input-group mb-3">
+                                                    <input asp-for="Cost" type="text" class="form-control">
+                                                    <span class="input-group-text">₽</span>
+                                                    <span class="input-group-text">Стоимость</span>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                                                <input asp-controller="Home" asp-action="AdminView" asp-route-productId=@product.Id class="btn btn-outline-primary" type="submit" value="Сохранить изменения">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-right">
+                            <form asp-action="RemoveProduct" asp-controller="Home">
+                                <input asp-action="RemoveProduct" asp-controller="Home" asp-route-productId=@product.Id class="btn btn-outline-primary" type="submit" value="Удалить товар">
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<form  asp-action="Import" asp-controller="Home" enctype="multipart/form-data" method="post">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <button asp-action="Import" asp-controller="Home" class="btn btn-outline-primary" type="submit" value="Upload">Импорт продукции</button>
+        </div>
+        <div class="custom-file">
+            <input type="file" class="custom-file-input" name="fileExcel" id="fileExcel">
+            <lable class="custom-file-label" for="fileExcel">Выберите файл</lable>
+        </div>
+    </div>
+</form>
+<form asp-action="Export" asp-controller="Home">
+    <button asp-action="Export" asp-controller="Home" type="submit" class="btn btn-outline-primary btn-lg btn-block">Экспорт заказов</button>
+</form>

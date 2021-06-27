@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Domain.Entities
 {
@@ -11,5 +12,9 @@ namespace Domain.Entities
         public int UserId { get; set; }
         public User User { get; set; }
         public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+        public decimal ComputeTotalValue()
+        {
+            return (decimal)OrderDetails.Sum(e => e.UnitPrice * e.Quantity);
+        }
     }
 }

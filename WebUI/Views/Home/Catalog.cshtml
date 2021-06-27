@@ -1,5 +1,9 @@
 ﻿@model IEnumerable<Domain.Entities.CategoryOfProduct> 
 @{
+    @if (User.Claims.ToList().Find(m => m.Value == "Admin") != null )
+    {
+        Layout = "_AdminLayout";
+    }
     ViewData["Title"] = "Список товаров";
 }
 

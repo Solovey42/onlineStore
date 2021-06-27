@@ -1,5 +1,9 @@
 ﻿@model WebUI.Models.ProductListViewModel
 @{
+    @if (User.Claims.ToList().Find(m => m.Value == "Admin") != null)
+    {
+        Layout = "_AdminLayout";
+    }
     ViewData["Title"] = "Список товаров";
     <link href="~/css/productList.css" rel="stylesheet" />
 }
@@ -21,18 +25,25 @@
                 <td>@product.Size</td>
                 <td>@product.Cost</td>
                 <td>
-                @if (Model.SelectedProductId == product.Id)
-                {
-                    <input asp-for="Quantity" type="text" class="form-control inputError" placeholder="Введите количество" /><span asp-validation-for="Quantity"></span>
-                }
-                else
-                {
-                    <input asp-for="Quantity" type="text" class="form-control" placeholder="Введите количество" value="" />
-                }
+                    @if (Model.SelectedProductId == product.Id)
+                    {
+                        <input asp-for="Quantity" type="text" class="form-control inputError" placeholder="Введите количество" /><span asp-validation-for="Quantity"></span>
+                    }
+                    else
+                    {
+                        <input asp-for="Quantity" type="text" class="form-control" placeholder="Введите количество" value="" />
+                    }
                 </td>
                 <td>@product.Unit</td>
                 <td class="text-right">
-                    <input asp-route-selectedProductId=@product.Id asp-route-returnUrl=@Context.Request.Path class="btn btn-outline-primary" type="submit" value="Добавить в корзину">
+                    @if (User.Claims.ToList().Find(m => m.Value == "Admin") != null)
+                    {
+                        <input asp-route-selectedProductId=@product.Id asp-route-returnUrl=@Context.Request.Path class="btn btn-outline-primary" type="submit" value="Добавить в корзину" disabled>
+                    }
+                    else
+                    {
+                        <input asp-route-selectedProductId=@product.Id asp-route-returnUrl=@Context.Request.Path class="btn btn-outline-primary" type="submit" value="Добавить в корзину">
+                    }
                 </td>
             </form>
         </tr>
