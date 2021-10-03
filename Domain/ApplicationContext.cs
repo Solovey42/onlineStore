@@ -15,17 +15,16 @@ namespace Domain
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
-
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite("Filename=Database.db");
+        }
+        
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
         {
             Database.EnsureCreated();
         }
-
-/*        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=onlineStore;Username=postgres;Password=2363");
-        }*/
 
     }
 }
