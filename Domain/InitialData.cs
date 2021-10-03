@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Domain
@@ -30,7 +31,7 @@ namespace Domain
                         FirstName = "Иванов",
                         LastName = "Иван",
                         Email = "123@gmail.com",
-                        Password = "123",
+                        Hash = "123",
                         ContactPhone = "+79239993333",
                         RoleId = 2
                     },
@@ -39,7 +40,7 @@ namespace Domain
                         FirstName = "Алексей",
                         LastName = "Алексеев",
                         Email = "alex@gmail.com",
-                        Password = "alex",
+                        Hash = "alex",
                         ContactPhone = "+79282328766",
                         RoleId = 2
                     },
@@ -48,7 +49,7 @@ namespace Domain
                         FirstName = "Соловьев",
                         LastName = "Вячеслав",
                         Email = "admin@gmail.com",
-                        Password = "admin",
+                        Hash = "admin",
                         ContactPhone = "+79239999999",
                         RoleId = 1,
                     }
@@ -77,6 +78,31 @@ namespace Domain
                    {
                        Name = "Труба",
                        ImagePath = "/images/4_catalog.png"
+                   },
+                   new CategoryOfProduct()
+                   {
+                       Name = "Материалы верхнего строения пути",
+                       ImagePath = "/images/5_catalog.png"
+                   },
+                   new CategoryOfProduct()
+                   {
+                       Name = "Фасонный прокат",
+                       ImagePath = "/images/6_catalog.png"
+                   },
+                   new CategoryOfProduct()
+                   {
+                       Name = "Продукция специального назначения",
+                       ImagePath = "/images/7_catalog.png"
+                   },
+                   new CategoryOfProduct()
+                   {
+                       Name = "Канат",
+                       ImagePath = "/images/8_catalog.png"
+                   },
+                   new CategoryOfProduct()
+                   {
+                       Name = "Прочее",
+                       ImagePath = "/images/9_catalog.png"
                    }
                 );
             }
@@ -130,6 +156,16 @@ namespace Domain
                     },
                     new TypeOfProduct
                     {
+                        Name = "Рельсы",
+                        CategoryOfProductId = 5
+                    },
+                    new TypeOfProduct
+                    {
+                        Name = "Уголок",
+                        CategoryOfProductId = 6
+                    },
+                    new TypeOfProduct
+                    {
                         Name = "Труба оцинкованная",
                         CategoryOfProductId = 4
                     }
@@ -174,7 +210,7 @@ namespace Domain
                     new Product()
                     {
                         Name = "Лист х/к 0,5 ст.08пс",
-                        Cost = 400,
+                        Cost = 120491,
                         Size = "1,25*2,5 м",
                         Unit = "Тонна",
                         TypeOfProductId = 5
@@ -182,19 +218,59 @@ namespace Domain
                     new Product()
                     {
                         Name = "Лист х/к 0,7 ст.08пс",
-                        Cost = 500,
+                        Cost = 147600,
                         Size = "1,25*2,5 м",
                         Unit = "Тонна",
                         TypeOfProductId = 5
                     },
                     new Product()
                     {
+                        Name = "Рулон х/к 0,5 ст.08пс",
+                        Cost = 210340,
+                        Size = "1,25 м",
+                        Unit = "Тонна",
+                        TypeOfProductId = 5
+                    },
+                     new Product()
+                     {
+                         Name = "Лист х/к 2,5 ст.08пс",
+                         Cost = 231700,
+                         Size = "1,25*2,5 м",
+                         Unit = "Тонна",
+                         TypeOfProductId = 5
+                     },
+                    new Product()
+                    {
                         Name = "Лист х/к 0,8 ст.08пс",
-                        Cost = 450,
+                        Cost = 150900,
                         Size = "1,25*2,5 м",
                         Unit = "Тонна",
                         TypeOfProductId = 5
                     },
+                    new Product()
+                    {
+                        Name = "Лист х/к 0,9 ст.08пс",
+                        Cost = 170900,
+                        Size = "1,25*2,5 м",
+                        Unit = "Тонна",
+                        TypeOfProductId = 5
+                    },
+                    new Product()
+                    {
+                        Name = "Лист х/к 1,5 ст.08пс",
+                        Cost = 192870,
+                        Size = "1,25*2,5 м",
+                        Unit = "Тонна",
+                        TypeOfProductId = 5
+                    },
+                     new Product()
+                     {
+                         Name = "Лист х/к 2 ст.08пс",
+                         Cost = 250390,
+                         Size = "1,25*2,5 м",
+                         Unit = "Тонна",
+                         TypeOfProductId = 5
+                     },
                     new Product()
                     {
                         Name = "Лист оцинк. 0,4",
@@ -345,18 +421,10 @@ namespace Domain
                 context.Orders.AddRange(
                    new Order()
                    {
-                       Date = DateTime.Parse("2021-04-12 12:30:00"),
-                       UserId = 2
-                   },
-                   new Order()
-                   {
                        Date = DateTime.Parse("2021-04-20 12:27:32"),
+                       Address = "Шахетров 81",
+                       OrderDetails = new List<OrderDetail> { new OrderDetail { ProductId = 1, OrderId = 1, Quantity = 2, UnitPrice =3050 } },
                        UserId = 2
-                   },
-                   new Order()
-                   {
-                       Date = DateTime.Parse("2021-04-21 17:41:37"),
-                       UserId = 3
                    }
                 );
                 context.SaveChanges();

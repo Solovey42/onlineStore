@@ -14,11 +14,11 @@ namespace WebUI.Models
 
         [Required(ErrorMessage = "Не указано количество")]
         [Range(1, 10000, ErrorMessage = "Недопустимое значение")]
-        public int? Quantity { get; set; }
+        public double? Quantity { get; set; }
 
         public int? SelectedProductId { get; set; }
 
-        public ProductListViewModel(List<Product> products, int? quantity, int? selectdProductId)
+        public ProductListViewModel(List<Product> products, double? quantity, int? selectdProductId)
         {
             this.Products = products;
             this.Quantity = quantity;

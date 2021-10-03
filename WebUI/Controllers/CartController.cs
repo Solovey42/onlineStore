@@ -75,7 +75,7 @@ namespace WebUI.Controllers
         }
 
         [Authorize(Roles = "User")]
-        public RedirectToActionResult AddToCart(int productId, string returnUrl, int quantity)
+        public RedirectToActionResult AddToCart(int productId, string returnUrl, double quantity)
         {
             cart = GetCart();
             Product product = _context.Products
@@ -108,7 +108,7 @@ namespace WebUI.Controllers
         }
 
         [Authorize(Roles = "User")]
-        public ActionResult EditProduct(int productId, int newQuantity, string returnUrl)
+        public ActionResult EditProduct(int productId, double newQuantity, string returnUrl)
         {
             if (newQuantity > 0 && newQuantity < 10001 && newQuantity !=0)
             {
