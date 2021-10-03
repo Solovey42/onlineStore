@@ -43,7 +43,7 @@ namespace WebUI.Controllers
                                         FirstName = model.FirstName, 
                                         LastName = model.LastName, 
                                         Email = model.Email, 
-                                        Password = model.Password, 
+                                        Hash = model.Hash, 
                                         ContactPhone = model.ContactPhone, 
                                         RoleId = 2 
                     };
@@ -76,7 +76,7 @@ namespace WebUI.Controllers
             {
                 User user = await db.Users
                     .Include(u => u.Role)
-                    .FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
+                    .FirstOrDefaultAsync(u => u.Email == model.Email && u.Hash == model.Password);
                 if (user != null)
                 {
                     await Authenticate(user); // аутентификация

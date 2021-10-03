@@ -27,11 +27,13 @@ namespace WebUI
         public void ConfigureServices(IServiceCollection services)
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(connection));
-            
+            //services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(connection)); //для запуска с PostgreSQL
+            services.AddDbContext<ApplicationContext>(options => options.UseSqlite(connection)); //для запуска с SQLite
+            services.AddEntityFrameworkSqlite().AddDbContext<ApplicationContext>();
+
             // установка конфигурации подключения
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options => //CookieAuthenticationOptions
+                .AddCookie(options =>
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                 });
@@ -45,6 +47,7 @@ namespace WebUI
             app.UseStaticFiles();
 
             app.UseRouting();
+
 
             app.UseAuthentication();    // аутентификация
             app.UseAuthorization();     // авторизация
